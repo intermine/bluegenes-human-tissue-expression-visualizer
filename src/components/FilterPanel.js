@@ -47,7 +47,6 @@ const FilterPanel = ({
 						</label>
 					))}
 				</div>
-				<div className="legend"></div>
 			</div>
 			<div className="data-set-filter">
 				Data Set

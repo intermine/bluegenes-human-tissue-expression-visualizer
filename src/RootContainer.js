@@ -123,27 +123,33 @@ const RootContainer = ({ serviceUrl, entity }) => {
 		// merge the data of those level whose value is true and is selected tissue in the filter panel
 		// suppose the state is - low: true, medium: true and low: [{gene: ADH5, gland: 3}], medium: [{gene: ADH5, testis: 21}]
 		// formatted data after merging them - [{gene: ADH5, gland: 3, testis: 21}]
-		const obj = {};
+		const values = [];
 		Object.keys(selectedExpression).map(level => {
 			if (dataAccToLevel[level] !== undefined && selectedExpression[level]) {
 				Object.values(dataAccToLevel[level]).map(data => {
 					Object.keys(data).map(tissue => {
 						const found = selectedTissue.find(t => t.value == tissue);
-						if (found !== undefined || tissue === 'Gene') {
-							if (tissue !== 'Gene' && selectedScale === 'Logarithmic Scale') {
-								obj[data.Gene] = {
-									...obj[data.Gene],
-									[tissue]:
+						if (found !== undefined) {
+							if (selectedScale === 'Logarithmic Scale') {
+								values.push({
+									gene: data.Gene,
+									tissue,
+									expression:
 										data[tissue] < 1 ? 0 : Math.log10(data[tissue]).toFixed(2)
-								};
-							} else
-								obj[data.Gene] = { ...obj[data.Gene], [tissue]: data[tissue] };
+								});
+							} else {
+								values.push({
+									gene: data.Gene,
+									tissue,
+									expression: data[tissue]
+								});
+							}
 						}
 					});
 				});
 			}
 		});
-		setHeatmapData([...Object.values(obj)]);
+		setHeatmapData(values);
 	};
 
 	return (
