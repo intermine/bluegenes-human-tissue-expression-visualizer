@@ -8,7 +8,7 @@ import {
 
 describe('query', () => {
 	const mockData = {
-		entity: [1215734, 1161508, 1020855],
+		entity: [1117907, 1144839, 1067416, 1218598, 1205381],
 		service: 'https://www.humanmine.org/humanmine'
 	};
 
@@ -30,7 +30,7 @@ describe('query', () => {
 	test('GTex Data: should return a rejected promise when data not available', () => {
 		const promise = queryData({
 			query: gTexDataQuery,
-			geneId: 'SOME-FAKE-LIST-NAME',
+			geneId: [1], // invalid gene
 			serviceUrl: mockData.service,
 			imjsClient: imjs
 		});
@@ -55,7 +55,7 @@ describe('query', () => {
 	test('illumina body map: should return a rejected promise when data not available', () => {
 		const promise = queryData({
 			query: illuminaDataQuery,
-			geneId: 'SOME-FAKE-LIST-NAME',
+			geneId: [1], // invalid gene
 			serviceUrl: mockData.service,
 			imjsClient: imjs
 		});
@@ -80,7 +80,7 @@ describe('query', () => {
 	test('RNASeq Data: should return a rejected promise when data not available', () => {
 		const promise = queryData({
 			query: RNASeqQuery,
-			geneId: 'SOME-FAKE-LIST-NAME',
+			geneId: [1], // invalid gene
 			serviceUrl: mockData.service,
 			imjsClient: imjs
 		});
