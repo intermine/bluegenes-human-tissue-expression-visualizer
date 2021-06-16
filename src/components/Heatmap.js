@@ -1,7 +1,7 @@
 import React from 'react';
 import { VegaLite } from 'react-vega';
 
-const Heatmap = ({ graphData, tissueList, labelHeight, graphHeight }) => {
+const Heatmap = ({ graphData }) => {
 	const spec = {
 		$schema: 'https://vega.github.io/schema/vega-lite/v5.json',
 		width: 'container',

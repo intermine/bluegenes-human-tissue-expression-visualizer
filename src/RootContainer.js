@@ -81,6 +81,13 @@ const RootContainer = ({ serviceUrl, entity }) => {
 			});
 			expressionLevelData[level] = levelData;
 		});
+
+		tissueList.sort((a, b) => {
+			if (a.label < b.label) return -1;
+			if (a.label > b.label) return 1;
+			return 0;
+		});
+
 		setDataAccToLevel(expressionLevelData);
 		setTissueList(tissueList);
 		setSelectedTissue(tissueList);
@@ -112,12 +119,6 @@ const RootContainer = ({ serviceUrl, entity }) => {
 			[value]: checked
 		});
 	};
-
-	const getValAccToDataset = () =>
-		selectedDataSet === 'illumina Body Map' ||
-		selectedDataSet === 'RNA Seq Data'
-			? 150
-			: 250;
 
 	const formatDataAccToSelectedLevel = () => {
 		// merge the data of those level whose value is true and is selected tissue in the filter panel
@@ -168,12 +169,7 @@ const RootContainer = ({ serviceUrl, entity }) => {
 						filterDataSet={e => changeDataSet(e.target.value)}
 					/>
 					{heatmapData.length && heatmapTissueList.length ? (
-						<Heatmap
-							tissueList={heatmapTissueList}
-							graphData={heatmapData}
-							labelHeight={getValAccToDataset()}
-							graphHeight={heatmapData.length * 50 + getValAccToDataset()}
-						/>
+						<Heatmap graphData={heatmapData} />
 					) : loading ? (
 						<Loading />
 					) : (
