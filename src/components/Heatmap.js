@@ -1,7 +1,7 @@
 import React from 'react';
 import { VegaLite } from 'react-vega';
 
-const Heatmap = ({ graphData }) => {
+const Heatmap = ({ graphData, isLogarithmic }) => {
 	const spec = {
 		$schema: 'https://vega.github.io/schema/vega-lite/v5.json',
 		width: 'container',
@@ -10,7 +10,7 @@ const Heatmap = ({ graphData }) => {
 			type: 'fit-x',
 			contains: 'padding'
 		},
-		mark: { type: 'rect', tooltip: true },
+		mark: 'rect',
 		encoding: {
 			y: { field: 'gene', type: 'ordinal', title: null },
 			x: {
@@ -19,10 +19,30 @@ const Heatmap = ({ graphData }) => {
 				title: null,
 				axis: { orient: 'top', labelAngle: -45, labelAlign: 'left' }
 			},
-			color: { field: 'expression', type: 'quantitative' }
+			color: {
+				field: 'expression',
+				type: 'quantitative',
+				legend: { title: null }
+			},
+			tooltip: [
+				{ field: 'gene', type: 'ordinal' },
+				{ field: 'tissue', type: 'ordinal' },
+				{ field: 'expression', type: 'quantitative' }
+			]
 		},
 		data: { name: 'values' }
 	};
+
+	if (isLogarithmic) {
+		spec.transform = [
+			{
+				calculate: 'if(datum.expression < 1, 1, datum.expression)',
+				as: 'expression_logready'
+			}
+		];
+		spec.encoding.color.field = 'expression_logready';
+		spec.encoding.color.scale = { type: 'log' };
+	}
 
 	return (
 		<div className="graph-container">

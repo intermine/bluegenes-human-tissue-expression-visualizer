@@ -131,20 +131,11 @@ const RootContainer = ({ serviceUrl, entity }) => {
 					Object.keys(data).map(tissue => {
 						const found = selectedTissue.find(t => t.value == tissue);
 						if (found !== undefined) {
-							if (selectedScale === 'Logarithmic Scale') {
-								values.push({
-									gene: data.Gene,
-									tissue,
-									expression:
-										data[tissue] < 1 ? 0 : Math.log10(data[tissue]).toFixed(2)
-								});
-							} else {
-								values.push({
-									gene: data.Gene,
-									tissue,
-									expression: data[tissue]
-								});
-							}
+							values.push({
+								gene: data.Gene,
+								tissue,
+								expression: data[tissue]
+							});
 						}
 					});
 				});
@@ -169,7 +160,10 @@ const RootContainer = ({ serviceUrl, entity }) => {
 						filterDataSet={e => changeDataSet(e.target.value)}
 					/>
 					{heatmapData.length && heatmapTissueList.length ? (
-						<Heatmap graphData={heatmapData} />
+						<Heatmap
+							graphData={heatmapData}
+							isLogarithmic={selectedScale === 'Logarithmic Scale'}
+						/>
 					) : loading ? (
 						<Loading />
 					) : (
