@@ -12,8 +12,8 @@ const Heatmap = ({ graphData }) => {
 		},
 		mark: { type: 'rect', tooltip: true },
 		encoding: {
-			x: { field: 'tissue', type: 'ordinal' },
-			y: { field: 'gene', type: 'ordinal' },
+			x: { field: 'tissue', type: 'ordinal', title: null },
+			y: { field: 'gene', type: 'ordinal', title: null },
 			color: { field: 'expression', type: 'quantitative' }
 		},
 		data: { name: 'values' }
