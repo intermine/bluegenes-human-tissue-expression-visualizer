@@ -15,7 +15,6 @@ const RootContainer = ({ serviceUrl, entity }) => {
 	const [dataAccToLevel, setDataAccToLevel] = useState([]);
 	const [tissueList, setTissueList] = useState([]);
 	const [heatmapData, setHeatmapData] = useState([]);
-	const [heatmapTissueList, setHeatmapTissueList] = useState([]);
 	const [selectedTissue, setSelectedTissue] = useState([]);
 	const [selectedExpression, setSelectedExpression] = useState({});
 	const [selectedScale, changeScale] = useState('Linear Scale');
@@ -91,7 +90,6 @@ const RootContainer = ({ serviceUrl, entity }) => {
 		setDataAccToLevel(expressionLevelData);
 		setTissueList(tissueList);
 		setSelectedTissue(tissueList);
-		setHeatmapTissueList(tissueList);
 	}, [data]);
 
 	useEffect(() => {
@@ -151,15 +149,15 @@ const RootContainer = ({ serviceUrl, entity }) => {
 					<FilterPanel
 						tissueList={tissueList}
 						updateFilter={value => setSelectedTissue(value)}
+						updateGraph={formatDataAccToSelectedLevel}
 						selectedExpression={selectedExpression}
 						expressionLevelFilter={expressionLevelFilter}
 						selectedScale={selectedScale}
 						scaleFilter={e => changeScale(e.target.value)}
-						filterTissue={() => setHeatmapTissueList(selectedTissue)}
 						selectedDataSet={selectedDataSet}
 						filterDataSet={e => changeDataSet(e.target.value)}
 					/>
-					{heatmapData.length && heatmapTissueList.length ? (
+					{heatmapData.length ? (
 						<Heatmap
 							graphData={heatmapData}
 							isLogarithmic={selectedScale === 'Logarithmic Scale'}
