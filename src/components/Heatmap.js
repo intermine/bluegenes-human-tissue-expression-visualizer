@@ -1,95 +1,52 @@
 import React from 'react';
-import { HeatMap } from '@nivo/heatmap';
-const heatmap_colors = ['#edf8e9', '#bae4b3', '#74c476', '#238b45'];
+import { VegaLite } from 'react-vega';
 
-const Heatmap = ({ graphData, tissueList, labelHeight, graphHeight }) => {
+const Heatmap = ({ graphData, isLogarithmic }) => {
+	const spec = {
+		$schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+		width: 'container',
+		height: { step: 10 },
+		autosize: {
+			type: 'fit-x',
+			contains: 'padding'
+		},
+		mark: 'rect',
+		encoding: {
+			y: { field: 'gene', type: 'ordinal', title: null },
+			x: {
+				field: 'tissue',
+				type: 'ordinal',
+				title: null,
+				axis: { orient: 'top', labelAngle: -45, labelAlign: 'left' }
+			},
+			color: {
+				field: 'expression',
+				type: 'quantitative',
+				legend: { title: null }
+			},
+			tooltip: [
+				{ field: 'gene', type: 'ordinal' },
+				{ field: 'tissue', type: 'ordinal' },
+				{ field: 'expression', type: 'quantitative' }
+			]
+		},
+		data: { name: 'values' }
+	};
+
+	if (isLogarithmic) {
+		spec.transform = [
+			{
+				calculate: 'if(datum.expression < 1, 1, datum.expression)',
+				as: 'expression_logready'
+			}
+		];
+		spec.encoding.color.field = 'expression_logready';
+		spec.encoding.color.scale = { type: 'log' };
+	}
+
 	return (
 		<div className="graph-container">
-			<HeatMap
-				animate={false}
-				data={graphData}
-				keys={tissueList.map(t => t.value)}
-				colors={heatmap_colors}
-				indexBy="Gene"
-				margin={{ top: labelHeight, right: 60, bottom: 0, left: 80 }}
-				forceSquare={true}
-				axisTop={{
-					orient: 'top',
-					tickSize: 5,
-					tickPadding: 5,
-					tickRotation: -90
-				}}
-				height={graphHeight}
-				width={tissueList.length * 50 + 100}
-				axisRight={null}
-				axisBottom={null}
-				axisLeft={{
-					orient: 'left',
-					tickSize: 5,
-					tickPadding: 5,
-					tickRotation: 0
-				}}
-				cellBorderWidth={1}
-				cellBorderColor="rgb(51, 51, 51)"
-				labelTextColor="rgb(51, 51, 51)"
-				cellHoverOthersOpacity={1}
-				cellOpacity={1}
-				nanColor="#fff"
-				cellShape={({
-					data,
-					value,
-					x,
-					y,
-					width,
-					height,
-					color,
-					opacity,
-					borderWidth,
-					borderColor,
-					enableLabel,
-					textColor,
-					onHover,
-					onLeave,
-					onClick,
-					theme
-				}) => {
-					return (
-						<g
-							transform={`translate(${x}, ${y})`}
-							onMouseEnter={onHover}
-							onMouseMove={onHover}
-							onMouseLeave={onLeave}
-							onClick={e => onClick(data, e)}
-							style={{ cursor: 'pointer' }}
-						>
-							<rect
-								x={width * -0.5}
-								y={height * -0.5}
-								width={width}
-								height={height}
-								fill={color}
-								fillOpacity={opacity}
-								strokeWidth={borderWidth}
-								stroke={borderColor}
-								strokeOpacity={opacity}
-							/>
-							{enableLabel && (
-								<text
-									alignmentBaseline="central"
-									textAnchor="middle"
-									style={{
-										...theme.labels.text,
-										fill: textColor
-									}}
-									fillOpacity={opacity}
-								>
-									{isNaN(value) ? 'NA' : value}
-								</text>
-							)}
-						</g>
-					);
-				}}
-			/>
+			<VegaLite spec={spec} data={{ values: graphData }} />
 		</div>
 	);
 };

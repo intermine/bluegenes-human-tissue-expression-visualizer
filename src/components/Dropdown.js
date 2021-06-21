@@ -2,7 +2,7 @@ import React from 'react';
 import Select from 'react-dropdown-select';
 import styled from '@emotion/styled';
 
-const Dropdown = ({ options, updateFilter, filterTissue }) => {
+const Dropdown = ({ options, updateFilter, updateGraph }) => {
 	const customContentRenderer = ({ props, state }) => (
 		<div style={{ cursor: 'pointer' }}>
 			{state.values.length} of {props.options.length} tissue selected
@@ -71,7 +71,7 @@ const Dropdown = ({ options, updateFilter, filterTissue }) => {
 				onChange={value => updateFilter(value)}
 				options={options}
 				values={options}
-				onDropdownClose={filterTissue}
+				onDropdownClose={updateGraph}
 			/>
 		</div>
 	);

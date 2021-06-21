@@ -3,8 +3,8 @@ import Dropdown from './Dropdown';
 
 const FilterPanel = ({
 	tissueList,
-	filterTissue,
 	updateFilter,
+	updateGraph,
 	expressionLevelFilter,
 	selectedExpression,
 	selectedScale,
@@ -20,7 +20,7 @@ const FilterPanel = ({
 					<Dropdown
 						options={tissueList}
 						updateFilter={updateFilter}
-						filterTissue={filterTissue}
+						updateGraph={updateGraph}
 					/>
 				</div>
 			</div>
@@ -47,7 +47,6 @@ const FilterPanel = ({
 						</label>
 					))}
 				</div>
-				<div className="legend"></div>
 			</div>
 			<div className="data-set-filter">
 				Data Set
